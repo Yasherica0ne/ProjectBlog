@@ -1,0 +1,14 @@
+﻿@model ProjectBlog.ViewModels.Comment
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h2>@Html.Sitecore().Field("Title")</h2>
+                <h3>@Html.Sitecore().Field("Sub title")</h3>
+                <p>@Html.Sitecore().Field("Content")</p>
+                <hr />
+            </div>
+        </div>
+    </div>
+</article>

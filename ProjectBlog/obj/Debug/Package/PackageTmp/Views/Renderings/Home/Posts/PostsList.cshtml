@@ -1,0 +1,43 @@
+﻿@model ProjectBlog.ViewModels.CatalogViewModel
+
+@if (Model.Products.Count == 0)
+{
+    @Html.Partial("~/Views/Renderings/Home/Posts/ElementsNotFound.cshtml");
+}
+else
+{
+    foreach (var post in Model.Products)
+    {
+        <div class="post-preview">
+            <a href="@post.Url">
+                <h2 class="post-title">
+                    @post.Theme
+                </h2>
+                <h3 class="post-subtitle">
+                    @post.SubTitle
+                </h3>
+            </a>
+            <p class="post-meta">
+                <h4>Category: @post.Category</h4>
+                <h4>
+                    Tags: @string.Join(",", post.Tags)
+                </h4>
+            </p>
+        </div>
+        <hr>
+    }
+}
+<h3>Pages: @Model.Pages</h3>
+<!-- Pager -->
+<div class="container">
+    <div class="clearfix">
+        @if (Model.Page != Model.Pages)
+        {
+            <input onclick="OlderPage()" type="submit" class="btn btn-primary float-right" value="Older Posts &rarr;" />
+        }
+        @if (Model.Page != 1)
+        {
+            <input onclick="NewerPage()" type="submit" class="btn btn-primary float-right" value="&larr; Newer Posts">
+        }
+    </div>
+</div>

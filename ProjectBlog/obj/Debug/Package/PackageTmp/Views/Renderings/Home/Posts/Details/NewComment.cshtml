@@ -1,0 +1,13 @@
+﻿@model ProjectBlog.ViewModels.Comment
+
+<div class="post-preview">
+    <h3 class="post-subtitle">
+        @Html.Raw(Model.Text)
+    </h3>
+    <p class="post-meta">
+        @Sitecore.Globalization.Translate.Text("Posted by")
+        <a href="#">@Model.Author</a>
+        @Sitecore.Globalization.Translate.Text("On") @Model.Date
+    </p>
+</div>
+<hr>

@@ -1,0 +1,22 @@
+﻿@using ProjectBlog.ViewModels
+@model List<Comment>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row">
+        <div id="comments" class="col-lg-8 col-md-10 mx-auto">
+            @if (Model.Count > 0)
+            {
+                <h2 class="my-4">@Sitecore.Globalization.Translate.Text("Comments")</h2>
+                foreach (Comment comment in Model)
+                {
+                    @Html.Partial("~/Views/Renderings/Home/Posts/Details/NewComment.cshtml", comment)
+                }
+                <!-- Pager -->
+                @*<div class="clearfix">
+                        <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+                    </div>*@
+            }
+        </div>
+    </div>
+</div>

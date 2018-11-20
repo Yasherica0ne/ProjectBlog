@@ -1,0 +1,39 @@
+﻿@model ProjectBlog.Models.Slider
+
+@if (Model.SlidesCount != 0)
+{
+    <div style="margin: auto; width: 50vw;">
+        <div id="carouselExampleIndicators" class="carousel slide" data-interval="@Model.Speed" data-ride="carousel">
+            <ol class="carousel-indicators">
+                @{
+                    for (int i = 1; i < Model.SlidesCount; i++)
+                    {
+                        string className = i == 0 ? "active" : "no";
+                        <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@className"></li>
+                    }
+
+                }
+            </ol>
+            <div class="carousel-inner">
+                @{
+                    for (int i = 0; i < Model.SlidesCount; i++)
+                    {
+                        string className = i == 0 ? "carousel-item active" : "carousel-item";
+                        <div class="@className">
+                            <img class="d-block w-100" style="height: 50vh; margin: auto;" src="@Model.Urls[i]" alt="Slide">
+                        </div>
+                    }
+                }
+
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+}

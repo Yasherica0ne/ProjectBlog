@@ -1,0 +1,25 @@
+﻿@using ProjectBlog.ViewModels
+@model List<ProductViewModel>
+
+<!-- Page Content -->
+<div class="container">
+    <!-- Team Members Row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="my-4">Top posts</h2>
+        </div>
+        @foreach (var post in Model)
+        {
+
+            <div class="col-lg-4 col-sm-6 text-center mb-4">
+                <a href="@post.Url">
+                    <h3>
+                        @post.Theme
+                    </h3>
+                </a>
+                <p>@post.Content</p>
+            </div>
+
+        }
+    </div>
+</div>

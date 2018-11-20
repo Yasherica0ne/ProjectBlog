@@ -1,0 +1,84 @@
+﻿@model ProjectBlog.ViewModels.CatalogViewModel
+
+@using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "posts", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.Sitecore().FormHandler("Post", "LoadPosts")
+
+
+    <script>
+        let page = @Model.Page;
+
+        function GetPage()
+        {
+            document.getElementById('Page').value = page;
+        }
+
+        function NewerPage() {
+            page--;
+            GetPage();
+        };
+        function OlderPage()
+        {
+            page++;
+            GetPage();
+        }
+
+        function OnSearch() {
+            page = 1;
+            GetPage();
+        }
+    </script>
+
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <table>
+                    <tr>
+                        <td>@Html.TextBoxFor(n => Model.SearchString, new { style = "width: 38vw;" })</td>
+                        <td>
+                            <input onclick="OnSearch()" type="submit" value="Search" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <h4>Categories</h4>
+                        @for (int i = 0; i < Model.Categories.Count; i++)
+                        {
+                            var category = Model.Categories[i];
+                            <p>
+                                @Html.HiddenFor(m => Model.Categories[i].Title)
+                                @Html.CheckBoxFor(m => Model.Categories[i].IsChecked) @category.Title (@category.Count)
+                            </p>
+                        }
+
+                        <h4>Tags</h4>
+                        @for (int i = 0; i < Model.Tags.Count; i++)
+                        {
+                            var tag = Model.Tags[i];
+                            <p>
+                                @Html.HiddenFor(m => Model.Tags[i].Title)
+                                @Html.CheckBoxFor(m => Model.Tags[i].IsChecked) @tag.Title (@tag.Count)
+                            </p>
+                        }
+
+                        <input onclick="OnSearch()" type="submit" value="Filter">
+                    </div>
+                    <div id="posts" class="col-md-10">
+                        @Html.Partial("~/Views/Renderings/Home/Posts/PostsList.cshtml", Model)
+                    </div>
+                    @Html.HiddenFor(model => Model.Page)
+                    @Html.HiddenFor(model => Model.PostsPerPage)
+                    @Html.HiddenFor(model => Model.Pages)
+                    @Html.HiddenFor(model => Model.Lang)
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

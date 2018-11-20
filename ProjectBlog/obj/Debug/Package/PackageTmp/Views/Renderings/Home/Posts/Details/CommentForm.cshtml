@@ -1,0 +1,29 @@
+﻿@model ProjectBlog.ViewModels.Comment
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            @using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "comments", InsertionMode = InsertionMode.InsertAfter }))
+            {
+                @Html.Sitecore().FormHandler("Post", "CreateComment")
+                <table>
+                    <tr>
+                        <td><p>@Sitecore.Globalization.Translate.Text("Your name")</p></td>
+                        <td>@Html.TextBoxFor(comment => comment.Author, new { style = "width: 20vw;" })</td>
+                    </tr>
+                    <tr>
+                        <td><p>@Sitecore.Globalization.Translate.Text("Comment")</p></td>
+                        <td>@Html.TextAreaFor(comment => comment.Text, new { style = "width: 20vw;" })</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Send" />
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
