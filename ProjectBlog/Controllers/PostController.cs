@@ -226,11 +226,7 @@ namespace ProjectBlog.Controllers
 
         public ActionResult Details()
         {
-
-            //ISitecoreContext ctx = GetContextItem<ISitecoreContext>();
             var item = GetLayoutItem<Details>();
-            //var item = ctx.GetCurrentItem<Details>();
-
             return PartialView("~/Views/Renderings/Home/Posts/Details/Details.cshtml", item);
         }
     }

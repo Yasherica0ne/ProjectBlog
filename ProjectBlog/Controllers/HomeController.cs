@@ -1,4 +1,5 @@
 ﻿using Glass.Mapper.Sc;
+using Glass.Mapper.Sc.Web.Mvc;
 using ProjectBlog.ContentSearch.Queries;
 using ProjectBlog.ContentSearch.Repositories;
 using ProjectBlog.Models;
@@ -16,7 +17,7 @@ using System.Web.Mvc;
 
 namespace ProjectBlog.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : GlassController
     {
         //public ActionResult LanguageSwitcher
 
@@ -36,8 +37,7 @@ namespace ProjectBlog.Controllers
         {
             string homePath = Context.Site.StartPath;
             Item homeItem = GetItem(homePath);
-            ISitecoreContext ctx = new SitecoreContext();
-            var menu = ctx.GetCurrentItem<Header>();
+            var menu = GetLayoutItem<Header>();
             if (homeItem != null)
             {
                 string name = homeItem.Fields["Page title"].Value;

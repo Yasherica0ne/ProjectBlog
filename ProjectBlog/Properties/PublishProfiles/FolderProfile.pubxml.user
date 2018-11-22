@@ -118,10 +118,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/25/2012 21:48:56</publishTime>
     </File>
     <File Include="bin/ProjectBlog.dll">
-      <publishTime>11/22/2018 17:55:06</publishTime>
+      <publishTime>11/22/2018 17:58:30</publishTime>
     </File>
     <File Include="bin/ProjectBlog.pdb">
-      <publishTime>11/22/2018 17:55:06</publishTime>
+      <publishTime>11/22/2018 17:58:30</publishTime>
     </File>
     <File Include="bin/Rainbow.dll">
       <publishTime>08/08/2018 20:52:40</publishTime>
