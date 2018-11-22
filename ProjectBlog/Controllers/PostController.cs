@@ -1,10 +1,14 @@
-﻿using ProjectBlog.ContentSearch.Queries;
+﻿using Glass.Mapper.Sc;
+using Glass.Mapper.Sc.Web.Mvc;
+using ProjectBlog.ContentSearch.Queries;
 using ProjectBlog.ContentSearch.Repositories;
-using ProjectBlog.ViewModels;
+using ProjectBlog.Models;
+using ProjectBlog.Models.Items;
 using Sitecore;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
+using Sitecore.Globalization;
 using Sitecore.Publishing;
 using System;
 using System.Collections.Generic;
@@ -13,14 +17,14 @@ using System.Web.Mvc;
 
 namespace ProjectBlog.Controllers
 {
-    public class PostController : Controller
+    public class PostController : GlassController
     {
 
         private readonly ICatalogRepository _repository;
 
-        public PostController()
+        public PostController(ICatalogRepository repository)
         {
-            _repository = new CatalogRepository();
+            _repository = repository;
         }
 
         public ActionResult CommentForm()
@@ -31,7 +35,7 @@ namespace ProjectBlog.Controllers
         public ActionResult Comments()
         {
             var children = Context.Item.GetChildren();
-            List<Comment> list = new List<Comment>();
+            List<CommentViewModel> list = new List<CommentViewModel>();
             foreach (Item item in children)
             {
                 if (string.IsNullOrEmpty(item.Fields["Text"]?.Value)) continue;
@@ -40,7 +44,7 @@ namespace ProjectBlog.Controllers
                 {
                     date = newDate;
                 }
-                Comment comment = new Comment()
+                CommentViewModel comment = new CommentViewModel()
                 {
                     Author = item.Fields["Author"].Value,
                     Text = item.Fields["Text"].Value,
@@ -77,34 +81,37 @@ namespace ProjectBlog.Controllers
 
         // GET: Post
         [HttpPost]
-        public ActionResult CreateComment(Comment comment)
+        public ActionResult CreateComment(CommentViewModel comment)
         {
-            if (string.IsNullOrEmpty(comment.Text) || string.IsNullOrEmpty(comment.Author)) return null;
+            if (string.IsNullOrEmpty(comment.Text) || string.IsNullOrEmpty(comment.Author)) return Content("");
             string name = "Comment_" + Sitecore.DateUtil.IsoNow;
             Database masterDB = Factory.GetDatabase("master");
             var template = masterDB.GetTemplate("{B06B6CB9-7A5D-42D9-91E6-F094AEA4C0CD}");
-            ID parentId = Sitecore.Context.Item.ID;
-            Item masterParent = masterDB.GetItem(parentId);
-
-            using (new Sitecore.SecurityModel.SecurityDisabler())
+            using (new LanguageSwitcher(Context.Language))
             {
-                Item newItem = null;
-                try
+                ID parentId = Context.Item.ID;
+                Item masterParent = masterDB.GetItem(parentId);
+
+                using (new Sitecore.SecurityModel.SecurityDisabler())
                 {
-                    newItem = masterParent.Add(name, template);
-                    if (newItem != null)
+                    Item newItem = null;
+                    try
                     {
-                        newItem.Editing.BeginEdit();
-                        newItem["Author"] = comment.Author;
-                        newItem["Text"] = comment.Text;
-                        newItem["Date"] = comment.Date.ToString();
-                        newItem.Editing.EndEdit();
-                        PublishItem(masterDB, masterParent);
+                        newItem = masterParent.Add(name, template);
+                        if (newItem != null)
+                        {
+                            newItem.Editing.BeginEdit();
+                            newItem["Author"] = comment.Author;
+                            newItem["Text"] = comment.Text;
+                            newItem["Date"] = comment.Date.ToString();
+                            newItem.Editing.EndEdit();
+                            PublishItem(masterDB, masterParent);
+                        }
                     }
-                }
-                catch
-                {
-                    newItem.Editing.CancelEdit();
+                    catch
+                    {
+                        newItem.Editing.CancelEdit();
+                    }
                 }
             }
 
@@ -219,7 +226,12 @@ namespace ProjectBlog.Controllers
 
         public ActionResult Details()
         {
-            return PartialView("~/Views/Renderings/Home/Posts/Details/Details.cshtml");
+
+            //ISitecoreContext ctx = GetContextItem<ISitecoreContext>();
+            var item = GetLayoutItem<Details>();
+            //var item = ctx.GetCurrentItem<Details>();
+
+            return PartialView("~/Views/Renderings/Home/Posts/Details/Details.cshtml", item);
         }
     }
 }

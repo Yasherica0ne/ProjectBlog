@@ -1,4 +1,4 @@
-﻿@model ProjectBlog.ViewModels.CatalogViewModel
+﻿@model ProjectBlog.Models.CatalogViewModel
 
 @if (Model.Products.Count == 0)
 {
@@ -19,9 +19,12 @@ else
             </a>
             <p class="post-meta">
                 <h4>Category: @post.Category</h4>
-                <h4>
-                    Tags: @string.Join(",", post.Tags)
-                </h4>
+                @if (post.Tags != null)
+                {
+                    <h4>
+                        Tags: @string.Join(",", post.Tags)
+                    </h4>
+                }
             </p>
         </div>
         <hr>

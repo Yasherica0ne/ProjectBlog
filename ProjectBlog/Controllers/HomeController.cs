@@ -1,6 +1,8 @@
-﻿using ProjectBlog.ContentSearch.Queries;
+﻿using Glass.Mapper.Sc;
+using ProjectBlog.ContentSearch.Queries;
 using ProjectBlog.ContentSearch.Repositories;
-using ProjectBlog.ViewModels;
+using ProjectBlog.Models;
+using ProjectBlog.Models.Items;
 using Sitecore;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
@@ -34,7 +36,8 @@ namespace ProjectBlog.Controllers
         {
             string homePath = Context.Site.StartPath;
             Item homeItem = GetItem(homePath);
-            Header menu = new Header();
+            ISitecoreContext ctx = new SitecoreContext();
+            var menu = ctx.GetCurrentItem<Header>();
             if (homeItem != null)
             {
                 string name = homeItem.Fields["Page title"].Value;

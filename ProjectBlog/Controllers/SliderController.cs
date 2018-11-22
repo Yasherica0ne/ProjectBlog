@@ -2,9 +2,11 @@
 using Sitecore;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
+using Sitecore.Diagnostics;
 using Sitecore.Mvc.Presentation;
 using Sitecore.Resources.Media;
 using System;
+using System.Threading;
 using System.Web.Mvc;
 
 namespace ProjectBlog.Controllers
@@ -18,11 +20,20 @@ namespace ProjectBlog.Controllers
         // GET: Slider
         public ActionResult InitSlider()
         {
+            Thread.Sleep(3000);
+            try
+            {
+                throw new Exception("Artificial exception");
+            }
+            catch(Exception ex)
+            {
+                Log.Fatal(ex.StackTrace, this);
+            }
             var dataSourceId = RenderingContext.CurrentOrNull.Rendering.DataSource;
             var dataSource = GetItem(dataSourceId);
             MultilistField imagesList = dataSource.Fields["Images"];
             Item[] images = imagesList.GetItems();
-            Slider slider = new Slider();
+            SliderViewModel slider = new SliderViewModel();
             foreach (Item image in images)
             {
                 string imageUrl = MediaManager.GetMediaUrl(image);

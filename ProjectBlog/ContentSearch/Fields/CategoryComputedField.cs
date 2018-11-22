@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using Sitecore;
+using Sitecore.Collections;
 using Sitecore.ContentSearch;
 using Sitecore.ContentSearch.ComputedFields;
 using Sitecore.Data.Fields;
@@ -15,19 +17,33 @@ namespace ProjectBlog.ContentSearch.Fields
 
         public object ComputeFieldValue(IIndexable indexable)
         {
-
-            Assert.ArgumentNotNull(indexable, nameof(indexable));
-
-            if (indexable is SitecoreIndexableItem indexableItem)
+            try
             {
-                using (new LanguageSwitcher(indexableItem.Item.Language))
-                {
-                    LookupField field = indexableItem.Item.Fields["Category"];
-                    Item item = field.TargetItem;
-                    string value = item.Fields["Value"].Value;
-                    return value;
-                }
+                Assert.ArgumentNotNull(indexable, nameof(indexable));
 
+                if (indexable is SitecoreIndexableItem indexableItem)
+                {
+
+                    Language currentLanguage = indexableItem.Item.Language;
+                    using (new LanguageSwitcher(currentLanguage))
+                    {
+                        LookupField field = indexableItem.Item.Fields["Category"];
+                        Item item = field.TargetItem;
+                        string value = item.Fields["Value"].Value;
+                        //Language.TryParse("en", out Language defaultLang);
+                        //if (string.IsNullOrEmpty(value) && item.Language != defaultLang)
+                        //{
+                        //    Item fallbackItem = Context.Database.GetItem(item.ID, defaultLang);
+                        //    value = fallbackItem.Fields["Category"].Value;
+                        //}
+                        return value;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
             }
 
             Log.Warn($"{this} : unsupported IIndexable type : {indexable.GetType()}", this);
